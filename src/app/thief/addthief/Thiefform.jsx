@@ -1,4 +1,5 @@
 "use client"
+import axios from 'axios';
 import React from 'react';
 
 const Thiefform = () => {
@@ -17,13 +18,17 @@ const Thiefform = () => {
             "famousfor":famousfordata,
             "theftinfo":theftinfodata,
         }
-await fetch("http://localhost:4000/addthief", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify(thiefjson)
-});
+// await fetch("http://localhost:4000/addthief", {
+//   method: "POST",
+//   headers: {
+//     "Content-Type": "application/json"
+//   },
+//   body: JSON.stringify(thiefjson)
+// });
+
+await axios.post("http://localhost:4000/addthief",
+    thiefjson
+)
 
 e.target.reset();
        

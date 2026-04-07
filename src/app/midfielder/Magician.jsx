@@ -1,14 +1,49 @@
-import React from 'react';
+"use client"
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
 
 
 
 
 
-const Magicianobj = await fetch("http://localhost:4000/magicianofmidfield");
-const Magiciandata= await Magicianobj.json();
+
+
+
+
+
 
 const Magician = () => {
+  const [holder,setholder] = useState([]);
+
+ const deletehappen = async (id) => {
+  try {
+    // 1️⃣ UI theke instant remove
+    setholder(prev => prev.filter(item => item.magicianid !== id));
+
+    // 2️⃣ backend delete
+    const response = await axios.delete(`http://localhost:4000/deletethief/${id}`);
+    console.log("Deleted:", response.data);
+
+  } catch (error) {
+    console.error("Delete error:", error);
+    // ❌ optional: error hole state wapas ana
+    fetchdata();
+  }
+};
+
+  const fetchdata =async()=>{
+
+  const Magicianobj = await fetch("http://localhost:4000/magicianofmidfield");
+const Magiciandata= await Magicianobj.json();
+setholder(Magiciandata);
+
+  
+}
+
+useEffect(()=>{
+ fetchdata();
+},[])
     return (
          <div className="max-w-[1600px] mx-auto flex items-center justify-center min-h-screen bg-gray-100 p-6">
       
@@ -27,7 +62,7 @@ const Magician = () => {
           {/* Table Body */}
           <tbody>
             {
-              Magiciandata.map((singledata, index) => (
+              holder.map((singledata, index) => (
                 <tr 
                   key={index} 
                   className="border-b hover:bg-gray-50 hover:scale-[1.01] transition duration-200"
@@ -40,6 +75,10 @@ const Magician = () => {
                   </td>
                   <td className="py-6 px-8 text-gray-600">
                     {singledata.club}
+                  </td>
+
+                   <td className="py-3 px-4 text-white font-bold cursor-pointer  bg-amber-500" onClick={()=>deletehappen(singledata.magicianid)}>
+                     dddd
                   </td>
                 </tr>
               ))
